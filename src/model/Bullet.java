@@ -11,6 +11,6 @@ public class Bullet extends GameElement {
     }
 
     public void moveBullet(){
-        changePosition(0, -10, Double.POSITIVE_INFINITY);
+        changePosition(0, -15, Double.POSITIVE_INFINITY);
     }
 }
