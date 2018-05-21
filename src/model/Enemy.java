@@ -2,6 +2,8 @@ package model;
 
 import javafx.scene.shape.Circle;
 
+import java.util.Random;
+
 public class Enemy extends GameElement{
 
     private EnemyType type;
@@ -34,8 +36,14 @@ public class Enemy extends GameElement{
 
         String styleClassName;
 
+        private static final Random random = new Random();
+
         private EnemyType(String className){
             styleClassName = className;
+        }
+
+        public static EnemyType randomType(){
+            return values()[random.nextInt(values().length)];
         }
     }
 }

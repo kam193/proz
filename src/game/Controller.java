@@ -23,6 +23,7 @@ public class Controller {
     private List<Bullet> bullets = new ArrayList<>();
 
     private Timeline gameTimeLine;
+    private int countIteration = 0;
 
     @FXML
     public void initialize(){
@@ -30,14 +31,24 @@ public class Controller {
 
         paneGame.getChildren().add(player.getView());
 
-        enemies.add(new Enemy(250, Enemy.EnemyType.ICECREAM));
-        enemies.add(new Enemy(300, Enemy.EnemyType.CAKE));
-        enemies.add(new Enemy(350, Enemy.EnemyType.ICECREAM));
-
-        paneGame.getChildren().addAll(enemies.stream().map(e -> e.getView()).collect(Collectors.toList()));
         paneGame.getParent().setOnKeyPressed(this::pressedKey);
 
+        List<Integer> positions = new ArrayList<>();
+        Collections.addAll(positions, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575);
+
         gameTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> {
+            if (countIteration % 8 == 0){ // dodaj wrogow
+
+                Collections.shuffle(positions);
+
+                for (int i = 0; i < 5; i++) {
+                    Enemy enemy = new Enemy(positions.get(i), Enemy.EnemyType.randomType());
+
+                    enemies.add(enemy);
+                    paneGame.getChildren().add(enemy.getView());
+                }
+            }
+
             enemies.forEach(e -> e.moveEnemy());
             bullets.forEach(e -> e.moveBullet());
 
@@ -51,6 +62,8 @@ public class Controller {
 
             enemies.removeIf(e -> e.isToRemove());
             bullets.removeIf(e -> e.isToRemove());
+
+            countIteration += 1;
         }));
         gameTimeLine.setCycleCount(Animation.INDEFINITE);
         gameTimeLine.play();
