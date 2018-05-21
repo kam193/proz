@@ -1,8 +1,6 @@
-package model;
+package model.game.elements;
 
 import javafx.scene.shape.Circle;
-
-import javafx.scene.Node;
 
 public class GameElement {
     private final Circle view;

@@ -8,9 +8,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import model.Bullet;
-import model.Enemy;
-import model.Player;
+import model.game.elements.Bullet;
+import model.game.elements.Enemy;
+import model.game.elements.Player;
 
 import java.util.*;
 
