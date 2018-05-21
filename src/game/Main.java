@@ -15,8 +15,6 @@ public class Main extends Application {
         primaryStage.setTitle("PROZ");
         primaryStage.setScene(new Scene(root, 600, 600));
         root.requestFocus();
-        Controller controller = loader.getController();
-        primaryStage.setOnHidden(e -> controller.shutdown());
         primaryStage.show();
     }
 

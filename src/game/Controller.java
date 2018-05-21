@@ -86,8 +86,4 @@ public class Controller {
             paneGame.getChildren().add(bull.getView());
         }
     }
-
-    public void shutdown(){
-
-    }
 }
