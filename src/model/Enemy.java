@@ -21,7 +21,7 @@ public class Enemy extends GameElement{
         if (lastDirectionLeft)
             changeX *= -1;
         lastDirectionLeft = !lastDirectionLeft;
-        changePosition(changeX, 10, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+        changePosition(changeX, 10, Double.POSITIVE_INFINITY);
     }
 
     public EnemyType getType() {

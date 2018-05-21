@@ -10,10 +10,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("game.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+        Parent root = loader.load();
         primaryStage.setTitle("PROZ");
         primaryStage.setScene(new Scene(root, 600, 600));
         root.requestFocus();
+        Controller controller = loader.getController();
+        primaryStage.setOnHidden(e -> controller.shutdown());
         primaryStage.show();
     }
 

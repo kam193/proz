@@ -13,3 +13,7 @@
 .cake{
     -fx-fill: url("game/resources/1f370.png");
 }
+
+.bullet{
+    -fx-fill: black;
+}

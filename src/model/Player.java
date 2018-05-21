@@ -9,4 +9,8 @@ public class Player extends GameElement{
         getView().setCenterX(startX);
         getView().setCenterY(startY);
     }
+
+    public Bullet shoot(){
+        return new Bullet(getView().getCenterX(), getView().getCenterY()-20);
+    }
 }

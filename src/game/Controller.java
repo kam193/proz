@@ -4,10 +4,10 @@ import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import model.Bullet;
 import model.Enemy;
 import model.Player;
 
-import java.sql.Time;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,6 +16,7 @@ public class Controller {
     public Pane paneGame;
     private Player player;
     private List<Enemy> enemies = new ArrayList<>();
+    private List<Bullet> bullets = new ArrayList<>();
 
     private Timer gameTimer;
 
@@ -37,16 +38,27 @@ public class Controller {
             @Override
             public void run() {
                 enemies.forEach(e -> e.moveEnemy());
+                bullets.forEach(e -> e.moveBullet());
             }
         }, 500, 500);
     }
 
     public void pressedKey(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.LEFT) {
-            player.changePosition(-10, 0, 600, 600);
+            player.changePosition(-10, 0, 600);
         }
         else if (keyEvent.getCode() == KeyCode.RIGHT) {
-            player.changePosition(10, 0, 600, 600);
+            player.changePosition(10, 0, 600);
         }
+        else if (keyEvent.getCode() == KeyCode.SPACE){
+            Bullet bull = player.shoot();
+            bullets.add(bull);
+            paneGame.getChildren().add(bull.getView());
+        }
+    }
+
+    public void shutdown(){
+        gameTimer.cancel();
+        gameTimer.purge();
     }
 }
