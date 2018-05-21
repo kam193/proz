@@ -6,3 +6,10 @@
     -fx-fill: url("game/resources/1f349.png");
 }
 
+.icecream{
+    -fx-fill: url("game/resources/1f366.png");
+}
+
+.cake{
+    -fx-fill: url("game/resources/1f370.png");
+}
