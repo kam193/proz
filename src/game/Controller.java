@@ -36,8 +36,8 @@ public class Controller {
         List<Integer> positions = new ArrayList<>();
         Collections.addAll(positions, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575);
 
-        gameTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> {
-            if (countIteration % 8 == 0){ // dodaj wrogow
+        gameTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.1), event -> {
+            if (countIteration % 40 == 0){ // dodaj wrogow
 
                 Collections.shuffle(positions);
 
@@ -49,7 +49,9 @@ public class Controller {
                 }
             }
 
-            enemies.forEach(e -> e.moveEnemy());
+            if (countIteration % 5 == 0)
+                enemies.forEach(e -> e.moveEnemy());
+
             bullets.forEach(e -> e.moveBullet());
 
             bullets.forEach(bullet -> enemies.forEach(enemy -> {
