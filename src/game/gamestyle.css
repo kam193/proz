@@ -1,0 +1,8 @@
+@font-face {
+    src: url("resources/emojione-svg.otf");
+}
+
+.watermelon{
+    -fx-fill: url("game/resources/1f349.png");
+}
+
