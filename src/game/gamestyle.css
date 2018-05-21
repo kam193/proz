@@ -14,6 +14,18 @@
     -fx-fill: url("game/resources/1f370.png");
 }
 
+.candy{
+    -fx-fill: url("game/resources/1f36c.png");
+}
+
+.chocolate{
+    -fx-fill: url("game/resources/1f36b.png");
+}
+
+.birthdaycake{
+    -fx-fill: url("game/resources/1f382.png");
+}
+
 .bullet{
     -fx-fill: black;
 }

@@ -57,9 +57,11 @@ public class Controller {
             bullets.forEach(bullet -> enemies.forEach(enemy -> {
                 if (bullet.isCollision(enemy)) {
                     bullet.setToRemove(true);
-                    enemy.setToRemove(true);
+                    enemy.hit();
 
-                    paneGame.getChildren().removeAll(bullet.getView(), enemy.getView());
+                    paneGame.getChildren().remove(bullet.getView());
+                    if (enemy.isToRemove())
+                        paneGame.getChildren().remove(enemy.getView());
                 }}));
 
             enemies.removeIf(e -> e.isToRemove());

@@ -8,6 +8,7 @@ public class Enemy extends GameElement{
 
     private EnemyType type;
     private boolean lastDirectionLeft = false;
+    private int health;
 
     public Enemy(double startX, EnemyType typeEnemy){
         super(new Circle(20));
@@ -15,7 +16,7 @@ public class Enemy extends GameElement{
         getView().getStyleClass().add(type.styleClassName);
         getView().setCenterX(startX);
         getView().setCenterY(25);
-
+        health = type.health;
     }
 
     public void moveEnemy(){
@@ -26,20 +27,31 @@ public class Enemy extends GameElement{
         changePosition(changeX, 10, Double.POSITIVE_INFINITY);
     }
 
+    public void hit(){
+        if(--health <= 0)
+            setToRemove(true);
+    }
+
     public EnemyType getType() {
         return type;
     }
 
     public enum EnemyType{
-        ICECREAM("icecream"),
-        CAKE("cake");
+        ICECREAM("icecream", 2),
+        CAKE("cake", 4),
+        CANDY("candy", 1),
+        BIRTHDAYCAKE("birthdaycake", 5),
+        CHOCOLATE("chocolate", 3);
+
 
         String styleClassName;
+        int health;
 
         private static final Random random = new Random();
 
-        private EnemyType(String className){
+        private EnemyType(String className, int enemyHealth){
             styleClassName = className;
+            health = enemyHealth;
         }
 
         public static EnemyType randomType(){
