@@ -1,4 +1,4 @@
-package game;
+package window;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +10,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("window.fxml"));
         Parent root = loader.load();
         primaryStage.setTitle("PROZ");
         primaryStage.setScene(new Scene(root, 600, 600));

@@ -1,0 +1,31 @@
+@font-face {
+    src: url("resources/emojione-svg.otf");
+}
+
+.watermelon{
+    -fx-fill: url("window/resources/1f349.png");
+}
+
+.icecream{
+    -fx-fill: url("window/resources/1f366.png");
+}
+
+.cake{
+    -fx-fill: url("window/resources/1f370.png");
+}
+
+.candy{
+    -fx-fill: url("window/resources/1f36c.png");
+}
+
+.chocolate{
+    -fx-fill: url("window/resources/1f36b.png");
+}
+
+.birthdaycake{
+    -fx-fill: url("window/resources/1f382.png");
+}
+
+.bullet{
+    -fx-fill: black;
+}

@@ -1,4 +1,4 @@
-package game;
+package window;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -13,7 +13,6 @@ import model.Enemy;
 import model.Player;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Controller {
 
