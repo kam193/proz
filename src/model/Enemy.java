@@ -5,6 +5,7 @@ import javafx.scene.shape.Circle;
 public class Enemy extends GameElement{
 
     private EnemyType type;
+    private boolean lastDirectionLeft = false;
 
     public Enemy(double startX, EnemyType typeEnemy){
         super(new Circle(20));
@@ -13,6 +14,14 @@ public class Enemy extends GameElement{
         getView().setCenterX(startX);
         getView().setCenterY(25);
 
+    }
+
+    public void moveEnemy(){
+        double changeX = -15;
+        if (lastDirectionLeft)
+            changeX *= -1;
+        lastDirectionLeft = !lastDirectionLeft;
+        changePosition(changeX, 10, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
 
     public EnemyType getType() {

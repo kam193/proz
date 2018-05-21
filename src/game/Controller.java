@@ -7,9 +7,8 @@ import javafx.scene.layout.Pane;
 import model.Enemy;
 import model.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.sql.Time;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Controller {
@@ -17,6 +16,8 @@ public class Controller {
     public Pane paneGame;
     private Player player;
     private List<Enemy> enemies = new ArrayList<>();
+
+    private Timer gameTimer;
 
     @FXML
     public void initialize(){
@@ -31,6 +32,13 @@ public class Controller {
         paneGame.getChildren().addAll(enemies.stream().map(e -> e.getView()).collect(Collectors.toList()));
         paneGame.getParent().setOnKeyPressed(this::pressedKey);
 
+        gameTimer = new Timer();
+        gameTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                enemies.forEach(e -> e.moveEnemy());
+            }
+        }, 500, 500);
     }
 
     public void pressedKey(KeyEvent keyEvent) {
