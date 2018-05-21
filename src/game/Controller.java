@@ -50,19 +50,18 @@ public class Controller {
             }
 
             if (countIteration % 5 == 0)
-                enemies.forEach(e -> e.moveEnemy());
+                enemies.forEach(e -> e.moveEnemy(600));
 
-            bullets.forEach(e -> e.moveBullet());
+            bullets.forEach(e -> e.moveBullet(600));
 
             bullets.forEach(bullet -> enemies.forEach(enemy -> {
                 if (bullet.isCollision(enemy)) {
                     bullet.setToRemove(true);
                     enemy.hit();
-
-                    paneGame.getChildren().remove(bullet.getView());
-                    if (enemy.isToRemove())
-                        paneGame.getChildren().remove(enemy.getView());
                 }}));
+
+            enemies.forEach(e -> {if (e.isToRemove()) paneGame.getChildren().remove(e.getView());});
+            bullets.forEach(b -> {if (b.isToRemove()) paneGame.getChildren().remove(b.getView());});
 
             enemies.removeIf(e -> e.isToRemove());
             bullets.removeIf(e -> e.isToRemove());

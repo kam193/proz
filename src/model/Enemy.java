@@ -19,12 +19,13 @@ public class Enemy extends GameElement{
         health = type.health;
     }
 
-    public void moveEnemy(){
+    public void moveEnemy(double maxY){
         double changeX = -15;
         if (lastDirectionLeft)
             changeX *= -1;
         lastDirectionLeft = !lastDirectionLeft;
         changePosition(changeX, 10, Double.POSITIVE_INFINITY);
+        checkIsObBoard(maxY);
     }
 
     public void hit(){

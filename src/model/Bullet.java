@@ -10,7 +10,8 @@ public class Bullet extends GameElement {
         getView().setCenterX(startX);
     }
 
-    public void moveBullet(){
+    public void moveBullet(double maxY){
         changePosition(0, -15, Double.POSITIVE_INFINITY);
+        checkIsObBoard(maxY);
     }
 }
