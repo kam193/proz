@@ -12,6 +12,8 @@ import java.util.List;
 
 public class GameState {
 
+    private List endGameListeners = new ArrayList();
+
     private Pane gameBoard;
 
     private Player player;
@@ -62,6 +64,9 @@ public class GameState {
             if (player.isCollision(enemy)){
                 player.setHealth(player.getHealth()-1);
                 enemy.setToRemove(true);
+
+                if (player.getHealth() <= 0)
+                    fireEndGameEvent();
             }
         });
 
@@ -101,5 +106,18 @@ public class GameState {
 
     public GameLevel getLevel(){
         return level;
+    }
+
+    public synchronized void addEndGameListener(GameEndListener listener){
+        endGameListeners.add(listener);
+    }
+
+    public synchronized void removeEndGameListener(GameEndListener listener){
+        endGameListeners.remove(listener);
+    }
+
+    private synchronized void fireEndGameEvent(){
+        GameEndEvent event = new GameEndEvent(this);
+        endGameListeners.forEach(e -> ((GameEndListener)e).endGameReceived(event));
     }
 }

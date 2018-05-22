@@ -11,6 +11,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import model.game.GameEndEvent;
+import model.game.GameEndListener;
 import model.game.GameState;
 import model.game.elements.Bullet;
 import model.game.elements.Enemy;
@@ -18,7 +20,7 @@ import model.game.elements.Player;
 
 import java.util.*;
 
-public class Controller {
+public class Controller implements GameEndListener {
 
     public Label labelStats;
     private GameState gameState;
@@ -31,6 +33,7 @@ public class Controller {
     public void initialize() {
         gameState = new GameState(paneGame);
 
+        gameState.addEndGameListener(this);
         paneGame.getParent().setOnKeyPressed(this::pressedKey);
 
         gameState.startGame();
@@ -56,5 +59,10 @@ public class Controller {
             System.out.println(gameState.getLevel().toString());
 
         }
+    }
+
+    @Override
+    public void endGameReceived(GameEndEvent event) {
+        System.out.println("KONIEC GRY");
     }
 }
