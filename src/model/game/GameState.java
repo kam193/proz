@@ -34,10 +34,10 @@ public class GameState {
     }
 
     public void clockTick(){
-        if (countIteration % 41 == 0){ // dodaj wrogow
+        if (countIteration % level.createEnemiesEveryNTicks == 0){ // dodaj wrogow
             Collections.shuffle(positions);
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < level.numberOfEnemiesToCreate; i++) {
                 Enemy enemy = new Enemy(positions.get(i), Enemy.EnemyType.randomType());
 
                 enemies.add(enemy);
@@ -45,7 +45,7 @@ public class GameState {
             }
         }
 
-        if (countIteration % 5 == 0)
+        if (countIteration % level.moveEnemiesEveryNTicks == 0)
             enemies.forEach(e -> e.moveEnemy(gameBoard.getHeight()));
 
         bullets.forEach(e -> e.moveBullet(gameBoard.getHeight()));
