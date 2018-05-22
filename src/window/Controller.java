@@ -58,11 +58,17 @@ public class Controller implements GameEndListener {
             System.out.println(String.format("Player healt: %d", gameState.getPlayerHealth()));
             System.out.println(gameState.getLevel().toString());
 
+        } else if (keyEvent.getCode() == KeyCode.R){
+            gameState.clearState();
+        } else if (keyEvent.getCode() == KeyCode.S){
+            gameState.startGame();
+            gameTimeLine.play();
         }
     }
 
     @Override
     public void endGameReceived(GameEndEvent event) {
         System.out.println("KONIEC GRY");
+        gameTimeLine.stop();
     }
 }

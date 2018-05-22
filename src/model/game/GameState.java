@@ -96,6 +96,20 @@ public class GameState {
         gameBoard.getChildren().add(bull.getView());
     }
 
+    public void clearState(){
+        enemies.forEach(e -> gameBoard.getChildren().remove(e.getView()));
+        bullets.forEach(b -> gameBoard.getChildren().remove(b.getView()));
+
+        enemies.clear();
+        bullets.clear();
+
+        gameBoard.getChildren().remove(player.getView());
+
+        level = GameLevel.LEVEL1;
+        countIteration = 0;
+        statistics = new GameStats();
+    }
+
     public GameStats getStatistics(){
         return statistics;
     }
