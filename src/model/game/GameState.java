@@ -19,6 +19,8 @@ public class GameState {
     private List<Bullet> bullets = new ArrayList<>();
     private GameStats statistics = new GameStats();
 
+    private GameLevel level = GameLevel.LEVEL1;
+
     private int countIteration = 0;
     private List<Integer> positions = new ArrayList<>(Arrays.asList(25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575));
 
@@ -27,7 +29,7 @@ public class GameState {
     }
 
     public void startGame(){
-        player = new Player(300, 500);
+        player = new Player(300, 500, 5);
         gameBoard.getChildren().add(player.getView());
     }
 
@@ -56,11 +58,21 @@ public class GameState {
                 }
             }}));
 
+        enemies.forEach(enemy -> {
+            if (player.isCollision(enemy)){
+                player.setHealth(player.getHealth()-1);
+                enemy.setToRemove(true);
+            }
+        });
+
         enemies.forEach(e -> {if (e.isToRemove()) gameBoard.getChildren().remove(e.getView());});
         bullets.forEach(b -> {if (b.isToRemove()) gameBoard.getChildren().remove(b.getView());});
 
         enemies.removeIf(e -> e.isToRemove());
         bullets.removeIf(e -> e.isToRemove());
+
+        if (statistics.getPointsProperty().get() >= level.nextLevelOnPoints)
+            level = level.next();
 
         countIteration += 1;
     }
@@ -81,5 +93,13 @@ public class GameState {
 
     public GameStats getStatistics(){
         return statistics;
+    }
+
+    public int getPlayerHealth(){
+        return player.getHealth();
+    }
+
+    public GameLevel getLevel(){
+        return level;
     }
 }

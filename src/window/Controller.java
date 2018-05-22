@@ -52,6 +52,8 @@ public class Controller {
             System.out.println(gameState.getStatistics().getPointsProperty().get());
             for (Enemy.EnemyType enemyType : Enemy.EnemyType.values())
                 System.out.println(String.format("%s: %d", enemyType.toString(), gameState.getStatistics().getKilledEnemy(enemyType)));
+            System.out.println(String.format("Player healt: %d", gameState.getPlayerHealth()));
+            System.out.println(gameState.getLevel().toString());
 
         }
     }
