@@ -3,7 +3,10 @@ package window;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -17,6 +20,7 @@ import java.util.*;
 
 public class Controller {
 
+    public Label labelStats;
     private GameState gameState;
 
     public Pane paneGame;
@@ -31,6 +35,7 @@ public class Controller {
 
         gameState.startGame();
 
+        labelStats.textProperty().bind(Bindings.valueAt(gameState.getStatistics().getKilledEnemies(), 1).asString());
         gameTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.1), event -> gameState.clockTick()));
         gameTimeLine.setCycleCount(Animation.INDEFINITE);
         gameTimeLine.play();
@@ -44,7 +49,7 @@ public class Controller {
         } else if (keyEvent.getCode() == KeyCode.SPACE) {
             gameState.shootPlayer();
         } else if (keyEvent.getCode() == KeyCode.P) {
-            System.out.println(gameState.getStatistics().getPoints());
+            System.out.println(gameState.getStatistics().getPointsProperty().get());
             for (Enemy.EnemyType enemyType : Enemy.EnemyType.values())
                 System.out.println(String.format("%s: %d", enemyType.toString(), gameState.getStatistics().getKilledEnemy(enemyType)));
 

@@ -1,23 +1,37 @@
 package model.game;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.game.elements.Enemy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameStats {
-    private int[] killedEnemies = new int[Enemy.EnemyType.values().length];
-    private int points = 0;
+    private ObservableList<Integer> killedEnemies = FXCollections.observableArrayList(new ArrayList<>());
+    private SimpleIntegerProperty pointsProperty = new SimpleIntegerProperty();
 
-    public int getPoints() {
-        return points;
+    public GameStats() {
+        for (int i = 0; i < Enemy.EnemyType.values().length; i++) {
+            killedEnemies.add(0);
+        }
     }
 
-    public void addKilledEnemy(Enemy.EnemyType type){
-        points += type.health;
-        killedEnemies[type.ordinal()] += 1;
+    public void addKilledEnemy(Enemy.EnemyType type) {
+        pointsProperty.set(pointsProperty.getValue() + type.health);
+        killedEnemies.set(type.ordinal(), killedEnemies.get(type.ordinal()) + 1);
     }
 
-    public int getKilledEnemy(Enemy.EnemyType type){
-        return killedEnemies[type.ordinal()];
+    public int getKilledEnemy(Enemy.EnemyType type) {
+        return killedEnemies.get(type.ordinal());
+    }
+
+    public SimpleIntegerProperty getPointsProperty() {
+        return pointsProperty;
+    }
+
+    public ObservableList<Integer> getKilledEnemies() {
+        return killedEnemies;
     }
 }
