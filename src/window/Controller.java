@@ -24,7 +24,7 @@ public class Controller {
     private Timeline gameTimeLine;
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         gameState = new GameState(paneGame);
 
         paneGame.getParent().setOnKeyPressed(this::pressedKey);
@@ -39,14 +39,15 @@ public class Controller {
     public void pressedKey(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.LEFT) {
             gameState.movePlayerLeft();
-        }
-        else if (keyEvent.getCode() == KeyCode.RIGHT) {
+        } else if (keyEvent.getCode() == KeyCode.RIGHT) {
             gameState.movePlayerRight();
-        }
-        else if (keyEvent.getCode() == KeyCode.SPACE){
+        } else if (keyEvent.getCode() == KeyCode.SPACE) {
             gameState.shootPlayer();
+        } else if (keyEvent.getCode() == KeyCode.P) {
+            System.out.println(gameState.getStatistics().getPoints());
+            for (Enemy.EnemyType enemyType : Enemy.EnemyType.values())
+                System.out.println(String.format("%s: %d", enemyType.toString(), gameState.getStatistics().getKilledEnemy(enemyType)));
+
         }
-        else if (keyEvent.getCode() == KeyCode.P)
-            System.out.println(gameState.getCollectedPoints());
     }
 }

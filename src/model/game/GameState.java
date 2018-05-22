@@ -17,7 +17,7 @@ public class GameState {
     private Player player;
     private List<Enemy> enemies = new ArrayList<>();
     private List<Bullet> bullets = new ArrayList<>();
-    private int collectedPoints = 0;
+    private GameStats statistics = new GameStats();
 
     private int countIteration = 0;
     private List<Integer> positions = new ArrayList<>(Arrays.asList(25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575));
@@ -51,7 +51,9 @@ public class GameState {
         bullets.forEach(bullet -> enemies.forEach(enemy -> {
             if (bullet.isCollision(enemy)) {
                 bullet.setToRemove(true);
-                collectedPoints += enemy.hitAndGetPoints();
+                if (enemy.hitAndIsKilled()){
+                    statistics.addKilledEnemy(enemy.getType());
+                }
             }}));
 
         enemies.forEach(e -> {if (e.isToRemove()) gameBoard.getChildren().remove(e.getView());});
@@ -77,7 +79,7 @@ public class GameState {
         gameBoard.getChildren().add(bull.getView());
     }
 
-    public int getCollectedPoints() {
-        return collectedPoints;
+    public GameStats getStatistics(){
+        return statistics;
     }
 }

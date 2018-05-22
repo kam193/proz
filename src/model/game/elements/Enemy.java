@@ -28,13 +28,13 @@ public class Enemy extends GameElement{
         checkIsObBoard(maxY);
     }
 
-    public int hitAndGetPoints(){
+    public boolean hitAndIsKilled(){
         if(--health == 0)
         {
             setToRemove(true);
-            return type.health;
+            return true;
         }
-        return 0;
+        return false;
     }
 
     public EnemyType getType() {
@@ -50,7 +50,7 @@ public class Enemy extends GameElement{
 
 
         String styleClassName;
-        int health;
+        public final int health;
 
         private static final Random random = new Random();
 
