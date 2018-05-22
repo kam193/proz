@@ -46,5 +46,7 @@ public class Controller {
         else if (keyEvent.getCode() == KeyCode.SPACE){
             gameState.shootPlayer();
         }
+        else if (keyEvent.getCode() == KeyCode.P)
+            System.out.println(gameState.getCollectedPoints());
     }
 }

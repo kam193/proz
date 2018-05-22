@@ -28,9 +28,13 @@ public class Enemy extends GameElement{
         checkIsObBoard(maxY);
     }
 
-    public void hit(){
-        if(--health <= 0)
+    public int hitAndGetPoints(){
+        if(--health == 0)
+        {
             setToRemove(true);
+            return type.health;
+        }
+        return 0;
     }
 
     public EnemyType getType() {
