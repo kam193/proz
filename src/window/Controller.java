@@ -4,25 +4,26 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import model.game.GameEndEvent;
 import model.game.GameEndListener;
 import model.game.GameState;
-import model.game.elements.Bullet;
 import model.game.elements.Enemy;
-import model.game.elements.Player;
-
-import java.util.*;
 
 public class Controller implements GameEndListener {
 
-    public Label labelStats;
+    public Label labelPoints;
+    public GridPane gridStats;
+    public Pane paneHealth;
+    public GridPane gridForKilled;
+    public Label labelLevel;
     private GameState gameState;
 
     public Pane paneGame;
@@ -38,7 +39,21 @@ public class Controller implements GameEndListener {
 
         gameState.startGame();
 
-        labelStats.textProperty().bind(Bindings.valueAt(gameState.getStatistics().getKilledEnemies(), 1).asString());
+        labelPoints.textProperty().bind(gameState.getStatistics().getPointsProperty().asString());
+        labelLevel.textProperty().bind(gameState.getLevelNameProperty());
+
+        int coumnIndex = 0;
+        for (Enemy.EnemyType enemyType : Enemy.EnemyType.values()){
+            Circle enemyIcon = new Circle(15);
+            enemyIcon.getStyleClass().add(enemyType.styleClassName);
+            gridForKilled.addColumn(coumnIndex++, enemyIcon);
+            Label countKilled = new Label();
+            countKilled.textProperty().bind(Bindings.valueAt(gameState.getStatistics().getKilledEnemies(), enemyType.ordinal()).asString());
+            gridForKilled.addColumn(coumnIndex++, countKilled);
+        }
+
+        paneHealth.prefWidthProperty().bind(gameState.getPlayerHealthProperty().multiply(32));
+
         gameTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.1), event -> gameState.clockTick()));
         gameTimeLine.setCycleCount(Animation.INDEFINITE);
         gameTimeLine.play();
@@ -55,7 +70,7 @@ public class Controller implements GameEndListener {
             System.out.println(gameState.getStatistics().getPointsProperty().get());
             for (Enemy.EnemyType enemyType : Enemy.EnemyType.values())
                 System.out.println(String.format("%s: %d", enemyType.toString(), gameState.getStatistics().getKilledEnemy(enemyType)));
-            System.out.println(String.format("Player healt: %d", gameState.getPlayerHealth()));
+            System.out.println(String.format("Player healt: %d", gameState.getPlayerHealthProperty()));
             System.out.println(gameState.getLevel().toString());
 
         } else if (keyEvent.getCode() == KeyCode.R){

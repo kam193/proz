@@ -1,7 +1,3 @@
-@font-face {
-    src: url("resources/emojione-svg.otf");
-}
-
 .watermelon{
     -fx-fill: url("window/resources/1f349.png");
 }
@@ -28,4 +24,18 @@
 
 .bullet{
     -fx-fill: black;
+}
+
+.health{
+    -fx-background-image: url("resources/2764.png");
+    -fx-background-repeat: repeat-x;
+}
+
+.stat-text{
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+}
+
+.stat-text .label{
+    -fx-padding: 3px;
 }

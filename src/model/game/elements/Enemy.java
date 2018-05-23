@@ -49,7 +49,7 @@ public class Enemy extends GameElement{
         CHOCOLATE("chocolate", 3);
 
 
-        String styleClassName;
+        public final String styleClassName;
         public final int health;
 
         private static final Random random = new Random();

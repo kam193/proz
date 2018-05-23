@@ -13,7 +13,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("window.fxml"));
         Parent root = loader.load();
         primaryStage.setTitle("PROZ");
-        primaryStage.setScene(new Scene(root, 600, 660));
+        primaryStage.setScene(new Scene(root, 600, 680));
         root.requestFocus();
         primaryStage.show();
     }

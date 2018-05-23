@@ -1,5 +1,7 @@
 package model.game;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.layout.Pane;
 import model.game.elements.Bullet;
 import model.game.elements.Enemy;
@@ -22,17 +24,19 @@ public class GameState {
     private GameStats statistics = new GameStats();
 
     private GameLevel level = GameLevel.LEVEL1;
+    private SimpleStringProperty levelNameProperty = new SimpleStringProperty(level.toString());
 
     private int countIteration = 0;
     private List<Integer> positions = new ArrayList<>(Arrays.asList(25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575));
 
     public GameState(Pane gameBoard){
         this.gameBoard = gameBoard;
+        player = new Player(300, 500, 5);
+        gameBoard.getChildren().add(player.getView());
     }
 
     public void startGame(){
-        player = new Player(300, 500, 5);
-        gameBoard.getChildren().add(player.getView());
+
     }
 
     public void clockTick(){
@@ -62,10 +66,10 @@ public class GameState {
 
         enemies.forEach(enemy -> {
             if (player.isCollision(enemy)){
-                player.setHealth(player.getHealth()-1);
+                player.setHealthProperty(player.getHealyhProperty().get() - 1);
                 enemy.setToRemove(true);
 
-                if (player.getHealth() <= 0)
+                if (player.getHealyhProperty().get() <= 0)
                     fireEndGameEvent();
             }
         });
@@ -77,7 +81,10 @@ public class GameState {
         bullets.removeIf(e -> e.isToRemove());
 
         if (statistics.getPointsProperty().get() >= level.nextLevelOnPoints)
+        {
             level = level.next();
+            levelNameProperty.set(level.toString());
+        }
 
         countIteration += 1;
     }
@@ -103,23 +110,31 @@ public class GameState {
         enemies.clear();
         bullets.clear();
 
-        gameBoard.getChildren().remove(player.getView());
+//        gameBoard.getChildren().remove(player.getView());
 
         level = GameLevel.LEVEL1;
         countIteration = 0;
-        statistics = new GameStats();
+        statistics.clear();
+
+        player.setHealthProperty(5);
+        player.getView().setCenterX(300);
+        player.getView().setCenterY(500);
     }
 
     public GameStats getStatistics(){
         return statistics;
     }
 
-    public int getPlayerHealth(){
-        return player.getHealth();
+    public SimpleIntegerProperty getPlayerHealthProperty(){
+        return player.getHealyhProperty();
     }
 
     public GameLevel getLevel(){
         return level;
+    }
+
+    public SimpleStringProperty getLevelNameProperty(){
+        return levelNameProperty;
     }
 
     public synchronized void addEndGameListener(GameEndListener listener){

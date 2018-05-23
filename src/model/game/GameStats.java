@@ -34,4 +34,11 @@ public class GameStats {
     public ObservableList<Integer> getKilledEnemies() {
         return killedEnemies;
     }
+
+    public void clear() {
+        pointsProperty.set(0);
+        for (int i = 0; i < Enemy.EnemyType.values().length; i++) {
+            killedEnemies.set(i, 0);
+        }
+    }
 }
