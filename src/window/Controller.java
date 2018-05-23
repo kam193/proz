@@ -27,6 +27,7 @@ public class Controller implements GameEndListener {
     public GridPane gridForKilled;
     public Label labelLevel;
     public DialogPane welcomeDialog;
+    public DialogPane gameOverDialog;
     private GameState gameState;
 
     public Pane paneGame;
@@ -74,6 +75,7 @@ public class Controller implements GameEndListener {
             }
         } else if (gameState.getPlayState() == PlayState.ENDGAME){
             if (keyEvent.getCode() == KeyCode.SPACE){
+                gameOverDialog.setVisible(false);
                 gameState.clearState();
                 gameState.startGame();
                 gameTimeLine.play();
@@ -90,5 +92,7 @@ public class Controller implements GameEndListener {
     @Override
     public void endGameReceived(GameEndEvent event) {
         gameTimeLine.stop();
+        gameOverDialog.setVisible(true);
+        gameOverDialog.toFront();
     }
 }

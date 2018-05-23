@@ -42,7 +42,7 @@
 
 .dialog-background{
     -fx-background-radius: 10;
-    -fx-background-color: rgba(100, 100, 100, 0.2);
+    -fx-background-color: rgba(100, 100, 100, 0.35);
 }
 
 .dialog-header{

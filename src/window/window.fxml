@@ -60,6 +60,47 @@
             <Insets top="150.0" />
          </GridPane.margin>
       </DialogPane>
+       <DialogPane fx:id="gameOverDialog" maxWidth="-Infinity" prefHeight="200.0" prefWidth="550.0" styleClass="dialog-background" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" visible="false">
+           <content>
+               <GridPane>
+                   <columnConstraints>
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="130.0" />
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                   </columnConstraints>
+                   <rowConstraints>
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                   </rowConstraints>
+                   <children>
+                       <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <image>
+                               <Image url="@resources/1f480.png" />
+                           </image>
+                       </ImageView>
+                       <GridPane alignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                           <rowConstraints>
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                               <Label styleClass="dialog-header" text="G A M E   O V E R" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                               <Label alignment="CENTER" styleClass="dialog-text" text="press SPACE to restart" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                               <Label alignment="CENTER" styleClass="dialog-comment" text="don't touch the sweets" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                           </children>
+                           <columnConstraints>
+                               <ColumnConstraints />
+                           </columnConstraints>
+                       </GridPane>
+                   </children>
+               </GridPane>
+           </content>
+           <opaqueInsets>
+               <Insets />
+           </opaqueInsets>
+           <GridPane.margin>
+               <Insets top="150.0" />
+           </GridPane.margin>
+       </DialogPane>
       <Pane fx:id="paneGame" maxHeight="600.0" maxWidth="600.0" minHeight="600.0" minWidth="600.0" prefHeight="600.0" prefWidth="600.0" GridPane.rowIndex="1">
       </Pane>
       <GridPane fx:id="gridStats" styleClass="stat-text">
