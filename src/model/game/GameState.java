@@ -26,6 +26,8 @@ public class GameState {
     private GameLevel level = GameLevel.LEVEL1;
     private SimpleStringProperty levelNameProperty = new SimpleStringProperty(level.toString());
 
+    private PlayState playState = PlayState.ENDGAME;
+
     private int countIteration = 0;
     private List<Integer> positions = new ArrayList<>(Arrays.asList(25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575));
 
@@ -33,10 +35,11 @@ public class GameState {
         this.gameBoard = gameBoard;
         player = new Player(300, 500, 5);
         gameBoard.getChildren().add(player.getView());
+        playState = PlayState.READY;
     }
 
     public void startGame(){
-
+        playState = PlayState.PLAYING;
     }
 
     public void clockTick(){
@@ -70,7 +73,10 @@ public class GameState {
                 enemy.setToRemove(true);
 
                 if (player.getHealyhProperty().get() <= 0)
+                {
+                    playState = PlayState.ENDGAME;
                     fireEndGameEvent();
+                }
             }
         });
 
@@ -113,12 +119,15 @@ public class GameState {
 //        gameBoard.getChildren().remove(player.getView());
 
         level = GameLevel.LEVEL1;
+        levelNameProperty.set(level.toString());
         countIteration = 0;
         statistics.clear();
 
         player.setHealthProperty(5);
         player.getView().setCenterX(300);
         player.getView().setCenterY(500);
+
+        playState = PlayState.READY;
     }
 
     public GameStats getStatistics(){
@@ -135,6 +144,10 @@ public class GameState {
 
     public SimpleStringProperty getLevelNameProperty(){
         return levelNameProperty;
+    }
+
+    public PlayState getPlayState() {
+        return playState;
     }
 
     public synchronized void addEndGameListener(GameEndListener listener){

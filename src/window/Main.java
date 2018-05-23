@@ -12,8 +12,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("window.fxml"));
         Parent root = loader.load();
-        primaryStage.setTitle("PROZ");
-        primaryStage.setScene(new Scene(root, 600, 680));
+        primaryStage.setTitle("Make watermelon great again");
+        primaryStage.setScene(new Scene(root, 600, 700));
         root.requestFocus();
         primaryStage.show();
     }

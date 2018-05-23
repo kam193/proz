@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -15,6 +16,7 @@ import javafx.util.Duration;
 import model.game.GameEndEvent;
 import model.game.GameEndListener;
 import model.game.GameState;
+import model.game.PlayState;
 import model.game.elements.Enemy;
 
 public class Controller implements GameEndListener {
@@ -24,6 +26,7 @@ public class Controller implements GameEndListener {
     public Pane paneHealth;
     public GridPane gridForKilled;
     public Label labelLevel;
+    public DialogPane welcomeDialog;
     private GameState gameState;
 
     public Pane paneGame;
@@ -37,7 +40,7 @@ public class Controller implements GameEndListener {
         gameState.addEndGameListener(this);
         paneGame.getParent().setOnKeyPressed(this::pressedKey);
 
-        gameState.startGame();
+//        gameState.startGame();
 
         labelPoints.textProperty().bind(gameState.getStatistics().getPointsProperty().asString());
         labelLevel.textProperty().bind(gameState.getLevelNameProperty());
@@ -56,34 +59,36 @@ public class Controller implements GameEndListener {
 
         gameTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.1), event -> gameState.clockTick()));
         gameTimeLine.setCycleCount(Animation.INDEFINITE);
-        gameTimeLine.play();
+//        gameTimeLine.play();
     }
 
     public void pressedKey(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.LEFT) {
-            gameState.movePlayerLeft();
-        } else if (keyEvent.getCode() == KeyCode.RIGHT) {
-            gameState.movePlayerRight();
-        } else if (keyEvent.getCode() == KeyCode.SPACE) {
-            gameState.shootPlayer();
-        } else if (keyEvent.getCode() == KeyCode.P) {
-            System.out.println(gameState.getStatistics().getPointsProperty().get());
-            for (Enemy.EnemyType enemyType : Enemy.EnemyType.values())
-                System.out.println(String.format("%s: %d", enemyType.toString(), gameState.getStatistics().getKilledEnemy(enemyType)));
-            System.out.println(String.format("Player healt: %d", gameState.getPlayerHealthProperty()));
-            System.out.println(gameState.getLevel().toString());
 
-        } else if (keyEvent.getCode() == KeyCode.R){
-            gameState.clearState();
-        } else if (keyEvent.getCode() == KeyCode.S){
-            gameState.startGame();
-            gameTimeLine.play();
+        if (gameState.getPlayState() == PlayState.PLAYING) {
+            if (keyEvent.getCode() == KeyCode.LEFT) {
+                gameState.movePlayerLeft();
+            } else if (keyEvent.getCode() == KeyCode.RIGHT) {
+                gameState.movePlayerRight();
+            } else if (keyEvent.getCode() == KeyCode.SPACE) {
+                gameState.shootPlayer();
+            }
+        } else if (gameState.getPlayState() == PlayState.ENDGAME){
+            if (keyEvent.getCode() == KeyCode.SPACE){
+                gameState.clearState();
+                gameState.startGame();
+                gameTimeLine.play();
+            }
+        } else {
+            if (keyEvent.getCode() == KeyCode.SPACE){
+                welcomeDialog.setVisible(false);
+                gameState.startGame();
+                gameTimeLine.play();
+            }
         }
     }
 
     @Override
     public void endGameReceived(GameEndEvent event) {
-        System.out.println("KONIEC GRY");
         gameTimeLine.stop();
     }
 }
