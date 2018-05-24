@@ -25,7 +25,6 @@ public class GameElement {
     public void changePosition(double offsetX, double offsetY, double maxX) {
         if (getView().getCenterX() + offsetX <= maxX && getView().getCenterX() + offsetX >= 0)
             getView().setCenterX(getView().getCenterX() + offsetX);
-        //if (getView().getCenterY() + offsetY <= maxY && getView().getCenterY() + offsetY >= 0)
         getView().setCenterY(getView().getCenterY() + offsetY);
 
     }
