@@ -2,10 +2,10 @@ package model.game;
 
 public enum GameLevel {
     LEVEL1(20, 4, 61, 2, 5, "Level 1"),
-    LEVEL2(50, 3, 50, 2, 6, "Level 2"),
-    LEVEL3(90, 2, 41, 3, 7, "Level 3"),
-    LEVEL4(150, 2, 30, 4, 8, "Level 4"),
-    LEVEL5(Integer.MAX_VALUE, 2, 31, 4, 9, "Level 5");
+    LEVEL2(50, 3, 50, 3, 6, "Level 2"),
+    LEVEL3(90, 2, 41, 4, 7, "Level 3"),
+    LEVEL4(200, 2, 30, 5, 8, "Level 4"),
+    LEVEL5(Integer.MAX_VALUE, 1, 31, 6, 9, "Level 5");
 
     public final int nextLevelOnPoints;
     public final int moveEnemiesEveryNTicks;

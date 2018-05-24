@@ -19,6 +19,8 @@ import model.game.GameState;
 import model.game.PlayState;
 import model.game.elements.Enemy;
 
+import java.sql.Time;
+
 public class Controller implements GameEndListener {
 
     public Label labelPoints;
@@ -33,6 +35,11 @@ public class Controller implements GameEndListener {
     public Pane paneGame;
 
     private Timeline gameTimeLine;
+    private Timeline keysTimeLine;
+
+    private boolean isShootKeyTyped = false;
+    private boolean isMoveKeyTyped = false;
+    private boolean isMoveToLeft = false;
 
     @FXML
     public void initialize() {
@@ -40,12 +47,13 @@ public class Controller implements GameEndListener {
 
         gameState.addEndGameListener(this);
         paneGame.getParent().setOnKeyPressed(this::pressedKey);
+        paneGame.getParent().setOnKeyReleased(this::releasedKey);
 
         labelPoints.textProperty().bind(gameState.getStatistics().getPointsProperty().asString());
         labelLevel.textProperty().bind(gameState.getLevelNameProperty());
 
         int columnIndex = 0;
-        for (Enemy.EnemyType enemyType : Enemy.EnemyType.values()){
+        for (Enemy.EnemyType enemyType : Enemy.EnemyType.values()) {
             Circle enemyIcon = new Circle(15);
             enemyIcon.getStyleClass().add(enemyType.styleClassName);
             gridForKilled.addColumn(columnIndex++, enemyIcon);
@@ -58,38 +66,76 @@ public class Controller implements GameEndListener {
 
         gameTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.05), event -> gameState.clockTick()));
         gameTimeLine.setCycleCount(Animation.INDEFINITE);
+
+        keysTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.05), event -> makeMoveAndShoot()));
+        keysTimeLine.setCycleCount(Animation.INDEFINITE);
     }
 
-    public void pressedKey(KeyEvent keyEvent) {
+    private void makeMoveAndShoot(){
+        if (isShootKeyTyped){
+            gameState.shootPlayer();
+        }
 
+        if (isMoveKeyTyped && isMoveToLeft){
+            gameState.movePlayerLeft();
+        }
+
+        if (isMoveKeyTyped && !isMoveToLeft){
+            gameState.movePlayerRight();
+        }
+    }
+
+    private void releasedKey(KeyEvent keyEvent) {
         if (gameState.getPlayState() == PlayState.PLAYING) {
-            if (keyEvent.getCode() == KeyCode.LEFT) {
-                gameState.movePlayerLeft();
+            if (keyEvent.getCode() == KeyCode.SPACE) {
+                isShootKeyTyped = false;
+            } else if (keyEvent.getCode() == KeyCode.LEFT) {
+                isMoveKeyTyped = false;
             } else if (keyEvent.getCode() == KeyCode.RIGHT) {
-                gameState.movePlayerRight();
-            } else if (keyEvent.getCode() == KeyCode.SPACE) {
-                gameState.shootPlayer();
-            }
-        } else if (gameState.getPlayState() == PlayState.ENDGAME){
-            if (keyEvent.getCode() == KeyCode.SPACE){
-                gameOverDialog.setVisible(false);
-                gameState.clearState();
-                gameState.startGame();
-                gameTimeLine.play();
-            }
-        } else {
-            if (keyEvent.getCode() == KeyCode.SPACE){
-                welcomeDialog.setVisible(false);
-                gameState.startGame();
-                gameTimeLine.play();
+                isMoveKeyTyped = false;
             }
         }
     }
 
+    public void pressedKey(KeyEvent keyEvent) {
+        if (gameState.getPlayState() == PlayState.PLAYING) {
+            if (keyEvent.getCode() == KeyCode.SPACE) {
+                isShootKeyTyped = true;
+            } else if (keyEvent.getCode() == KeyCode.LEFT) {
+                isMoveToLeft = true;
+                isMoveKeyTyped = true;
+            } else if (keyEvent.getCode() == KeyCode.RIGHT) {
+                isMoveToLeft = false;
+                isMoveKeyTyped = true;
+            }
+        } else  if (gameState.getPlayState() == PlayState.ENDGAME) {
+            if (keyEvent.getCode() == KeyCode.SPACE) {
+                gameOverDialog.setVisible(false);
+                gameState.clearState();
+                playGame();
+            }
+        } else if (gameState.getPlayState() == PlayState.READY) {
+            if (keyEvent.getCode() == KeyCode.SPACE) {
+                welcomeDialog.setVisible(false);
+                playGame();
+            }
+        }
+    }
+
+    private void playGame() {
+        gameState.startGame();
+        gameTimeLine.play();
+        keysTimeLine.play();
+    }
+
     @Override
     public void endGameReceived(GameEndEvent event) {
+        keysTimeLine.stop();
         gameTimeLine.stop();
         gameOverDialog.setVisible(true);
         gameOverDialog.toFront();
+
+        isShootKeyTyped = false;
+        isMoveKeyTyped = false;
     }
 }
