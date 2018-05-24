@@ -34,7 +34,7 @@ public class GameElement {
         return getView().getBoundsInParent().intersects(other.getView().getBoundsInParent()) && !isToRemove() && !other.isToRemove();
     }
 
-    protected void checkIsObBoard(double maxY){
+    protected void checkIsObBoard(double maxY) {
         if (getView().getCenterY() > maxY || getView().getCenterY() < 0)
             setToRemove(true);
     }

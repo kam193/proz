@@ -14,7 +14,7 @@ public enum GameLevel {
     public final double enemiesChangeX;
     public final String levelName;
 
-    private GameLevel(int nextLevel, int ticksToMoveEnemies, int ticksToCreateEnemies, int numberOfNewEnemies, double changeX, String name){
+    private GameLevel(int nextLevel, int ticksToMoveEnemies, int ticksToCreateEnemies, int numberOfNewEnemies, double changeX, String name) {
         nextLevelOnPoints = nextLevel;
         moveEnemiesEveryNTicks = ticksToMoveEnemies;
         createEnemiesEveryNTicks = ticksToCreateEnemies;
@@ -23,7 +23,7 @@ public enum GameLevel {
         levelName = name;
     }
 
-    public GameLevel next(){
+    public GameLevel next() {
         return (this.ordinal() + 1) % values().length == 0 ? this : values()[(this.ordinal() + 1) % values().length];
     }
 

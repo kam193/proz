@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 import model.game.elements.Enemy;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GameStats {
     private ObservableList<Integer> killedEnemies = FXCollections.observableArrayList(new ArrayList<>());

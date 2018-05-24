@@ -19,8 +19,6 @@ import model.game.GameState;
 import model.game.PlayState;
 import model.game.elements.Enemy;
 
-import java.sql.Time;
-
 public class Controller implements GameEndListener {
 
     public Label labelPoints;
@@ -71,16 +69,16 @@ public class Controller implements GameEndListener {
         keysTimeLine.setCycleCount(Animation.INDEFINITE);
     }
 
-    private void makeMoveAndShoot(){
-        if (isShootKeyTyped){
+    private void makeMoveAndShoot() {
+        if (isShootKeyTyped) {
             gameState.shootPlayer();
         }
 
-        if (isMoveKeyTyped && isMoveToLeft){
+        if (isMoveKeyTyped && isMoveToLeft) {
             gameState.movePlayerLeft();
         }
 
-        if (isMoveKeyTyped && !isMoveToLeft){
+        if (isMoveKeyTyped && !isMoveToLeft) {
             gameState.movePlayerRight();
         }
     }
@@ -108,7 +106,7 @@ public class Controller implements GameEndListener {
                 isMoveToLeft = false;
                 isMoveKeyTyped = true;
             }
-        } else  if (gameState.getPlayState() == PlayState.ENDGAME) {
+        } else if (gameState.getPlayState() == PlayState.ENDGAME) {
             if (keyEvent.getCode() == KeyCode.SPACE) {
                 gameOverDialog.setVisible(false);
                 gameState.clearState();

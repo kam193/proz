@@ -4,13 +4,13 @@ import javafx.scene.shape.Circle;
 
 import java.util.Random;
 
-public class Enemy extends GameElement{
+public class Enemy extends GameElement {
 
     private EnemyType type;
     private int lastDirectionLeft = 0;
     private int health;
 
-    public Enemy(double startX, EnemyType typeEnemy){
+    public Enemy(double startX, EnemyType typeEnemy) {
         super(new Circle(20));
         type = typeEnemy;
         getView().getStyleClass().add(type.styleClassName);
@@ -19,7 +19,7 @@ public class Enemy extends GameElement{
         health = type.health;
     }
 
-    public void moveEnemy(double maxY, double changeX){
+    public void moveEnemy(double maxY, double changeX) {
         if (lastDirectionLeft >= 5)
             changeX *= -1;
         lastDirectionLeft = (lastDirectionLeft + 1) % 10;
@@ -27,9 +27,8 @@ public class Enemy extends GameElement{
         checkIsObBoard(maxY);
     }
 
-    public boolean hitAndIsKilled(){
-        if(--health == 0)
-        {
+    public boolean hitAndIsKilled() {
+        if (--health == 0) {
             setToRemove(true);
             return true;
         }
@@ -40,7 +39,7 @@ public class Enemy extends GameElement{
         return type;
     }
 
-    public enum EnemyType{
+    public enum EnemyType {
         ICECREAM("icecream", 2),
         CAKE("cake", 4),
         CANDY("candy", 1),
@@ -48,17 +47,16 @@ public class Enemy extends GameElement{
         CHOCOLATE("chocolate", 3);
 
 
+        private static final Random random = new Random();
         public final String styleClassName;
         public final int health;
 
-        private static final Random random = new Random();
-
-        private EnemyType(String className, int enemyHealth){
+        private EnemyType(String className, int enemyHealth) {
             styleClassName = className;
             health = enemyHealth;
         }
 
-        public static EnemyType randomType(){
+        public static EnemyType randomType() {
             return values()[random.nextInt(values().length)];
         }
     }
