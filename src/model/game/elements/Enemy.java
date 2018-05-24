@@ -7,7 +7,7 @@ import java.util.Random;
 public class Enemy extends GameElement{
 
     private EnemyType type;
-    private boolean lastDirectionLeft = false;
+    private int lastDirectionLeft = 0;
     private int health;
 
     public Enemy(double startX, EnemyType typeEnemy){
@@ -19,12 +19,11 @@ public class Enemy extends GameElement{
         health = type.health;
     }
 
-    public void moveEnemy(double maxY){
-        double changeX = -15;
-        if (lastDirectionLeft)
+    public void moveEnemy(double maxY, double changeX){
+        if (lastDirectionLeft >= 5)
             changeX *= -1;
-        lastDirectionLeft = !lastDirectionLeft;
-        changePosition(changeX, 10, Double.POSITIVE_INFINITY);
+        lastDirectionLeft = (lastDirectionLeft + 1) % 10;
+        changePosition(changeX, 3, Double.POSITIVE_INFINITY);
         checkIsObBoard(maxY);
     }
 

@@ -26,123 +26,131 @@ public class GameState {
     private GameLevel level = GameLevel.LEVEL1;
     private SimpleStringProperty levelNameProperty = new SimpleStringProperty(level.toString());
 
-    private PlayState playState = PlayState.ENDGAME;
+    private PlayState playState;
 
     private int countIteration = 0;
     private List<Integer> positions = new ArrayList<>(Arrays.asList(25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575));
 
-    public GameState(Pane gameBoard){
+    public GameState(Pane gameBoard) {
         this.gameBoard = gameBoard;
-        player = new Player(300, 500, 5);
+        player = new Player(gameBoard.getPrefWidth() / 2, gameBoard.getPrefHeight() - 50, 5);
         gameBoard.getChildren().add(player.getView());
         playState = PlayState.READY;
     }
 
-    public void startGame(){
+    public void startGame() {
         playState = PlayState.PLAYING;
     }
 
-    public void clockTick(){
-        if (countIteration % level.createEnemiesEveryNTicks == 0){ // dodaj wrogow
-            Collections.shuffle(positions);
-
-            for (int i = 0; i < level.numberOfEnemiesToCreate; i++) {
-                Enemy enemy = new Enemy(positions.get(i), Enemy.EnemyType.randomType());
-
-                enemies.add(enemy);
-                gameBoard.getChildren().add(enemy.getView());
-            }
+    public void clockTick() {
+        if (countIteration % level.createEnemiesEveryNTicks == 0) {
+            createNewEnemies();
         }
 
         if (countIteration % level.moveEnemiesEveryNTicks == 0)
-            enemies.forEach(e -> e.moveEnemy(gameBoard.getHeight()));
+            enemies.forEach(e -> e.moveEnemy(gameBoard.getHeight(), level.enemiesChangeX));
 
         bullets.forEach(e -> e.moveBullet(gameBoard.getHeight()));
 
         bullets.forEach(bullet -> enemies.forEach(enemy -> {
             if (bullet.isCollision(enemy)) {
                 bullet.setToRemove(true);
-                if (enemy.hitAndIsKilled()){
+                if (enemy.hitAndIsKilled()) {
                     statistics.addKilledEnemy(enemy.getType());
                 }
-            }}));
+            }
+        }));
 
         enemies.forEach(enemy -> {
-            if (player.isCollision(enemy)){
+            if (player.isCollision(enemy)) {
                 player.setHealthProperty(player.getHealyhProperty().get() - 1);
                 enemy.setToRemove(true);
 
-                if (player.getHealyhProperty().get() <= 0)
-                {
+                if (player.getHealyhProperty().get() <= 0) {
                     playState = PlayState.ENDGAME;
                     fireEndGameEvent();
                 }
             }
         });
 
-        enemies.forEach(e -> {if (e.isToRemove()) gameBoard.getChildren().remove(e.getView());});
-        bullets.forEach(b -> {if (b.isToRemove()) gameBoard.getChildren().remove(b.getView());});
+        enemies.forEach(e -> {
+            if (e.isToRemove()) gameBoard.getChildren().remove(e.getView());
+        });
+        bullets.forEach(b -> {
+            if (b.isToRemove()) gameBoard.getChildren().remove(b.getView());
+        });
 
         enemies.removeIf(e -> e.isToRemove());
         bullets.removeIf(e -> e.isToRemove());
 
-        if (statistics.getPointsProperty().get() >= level.nextLevelOnPoints)
-        {
-            level = level.next();
-            levelNameProperty.set(level.toString());
+        if (statistics.getPointsProperty().get() >= level.nextLevelOnPoints) {
+            changeLevel(level.next());
         }
 
         countIteration += 1;
     }
 
-    public void movePlayerLeft(){
+    private void changeLevel(GameLevel next) {
+        level = next;
+        levelNameProperty.set(level.toString());
+    }
+
+    private void createNewEnemies() {
+        Collections.shuffle(positions);
+
+        for (int i = 0; i < level.numberOfEnemiesToCreate; i++) {
+            Enemy enemy = new Enemy(positions.get(i), Enemy.EnemyType.randomType());
+
+            enemies.add(enemy);
+            gameBoard.getChildren().add(enemy.getView());
+        }
+    }
+
+    public void movePlayerLeft() {
         player.changePosition(-10, 0, 600);
     }
 
-    public void movePlayerRight(){
+    public void movePlayerRight() {
         player.changePosition(10, 0, 600);
     }
 
-    public void shootPlayer(){
+    public void shootPlayer() {
         Bullet bull = player.shoot();
         bullets.add(bull);
         gameBoard.getChildren().add(bull.getView());
     }
 
-    public void clearState(){
+    public void clearState() {
         enemies.forEach(e -> gameBoard.getChildren().remove(e.getView()));
         bullets.forEach(b -> gameBoard.getChildren().remove(b.getView()));
 
         enemies.clear();
         bullets.clear();
 
-//        gameBoard.getChildren().remove(player.getView());
-
-        level = GameLevel.LEVEL1;
-        levelNameProperty.set(level.toString());
+        changeLevel(GameLevel.LEVEL1);
         countIteration = 0;
         statistics.clear();
 
         player.setHealthProperty(5);
-        player.getView().setCenterX(300);
-        player.getView().setCenterY(500);
+        player.getView().setCenterX(gameBoard.getPrefWidth() / 2);
+        player.getView().setCenterY(gameBoard.getPrefHeight() - 50);
 
         playState = PlayState.READY;
     }
 
-    public GameStats getStatistics(){
+    public GameStats getStatistics() {
         return statistics;
     }
 
-    public SimpleIntegerProperty getPlayerHealthProperty(){
+    public SimpleIntegerProperty getPlayerHealthProperty() {
         return player.getHealyhProperty();
     }
 
-    public GameLevel getLevel(){
+    public GameLevel getLevel() {
         return level;
     }
 
-    public SimpleStringProperty getLevelNameProperty(){
+    public SimpleStringProperty getLevelNameProperty() {
         return levelNameProperty;
     }
 
@@ -150,16 +158,16 @@ public class GameState {
         return playState;
     }
 
-    public synchronized void addEndGameListener(GameEndListener listener){
+    public synchronized void addEndGameListener(GameEndListener listener) {
         endGameListeners.add(listener);
     }
 
-    public synchronized void removeEndGameListener(GameEndListener listener){
+    public synchronized void removeEndGameListener(GameEndListener listener) {
         endGameListeners.remove(listener);
     }
 
-    private synchronized void fireEndGameEvent(){
+    private synchronized void fireEndGameEvent() {
         GameEndEvent event = new GameEndEvent(this);
-        endGameListeners.forEach(e -> ((GameEndListener)e).endGameReceived(event));
+        endGameListeners.forEach(e -> ((GameEndListener) e).endGameReceived(event));
     }
 }

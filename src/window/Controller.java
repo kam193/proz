@@ -41,26 +41,23 @@ public class Controller implements GameEndListener {
         gameState.addEndGameListener(this);
         paneGame.getParent().setOnKeyPressed(this::pressedKey);
 
-//        gameState.startGame();
-
         labelPoints.textProperty().bind(gameState.getStatistics().getPointsProperty().asString());
         labelLevel.textProperty().bind(gameState.getLevelNameProperty());
 
-        int coumnIndex = 0;
+        int columnIndex = 0;
         for (Enemy.EnemyType enemyType : Enemy.EnemyType.values()){
             Circle enemyIcon = new Circle(15);
             enemyIcon.getStyleClass().add(enemyType.styleClassName);
-            gridForKilled.addColumn(coumnIndex++, enemyIcon);
+            gridForKilled.addColumn(columnIndex++, enemyIcon);
             Label countKilled = new Label();
             countKilled.textProperty().bind(Bindings.valueAt(gameState.getStatistics().getKilledEnemies(), enemyType.ordinal()).asString());
-            gridForKilled.addColumn(coumnIndex++, countKilled);
+            gridForKilled.addColumn(columnIndex++, countKilled);
         }
 
         paneHealth.prefWidthProperty().bind(gameState.getPlayerHealthProperty().multiply(32));
 
-        gameTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.1), event -> gameState.clockTick()));
+        gameTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.05), event -> gameState.clockTick()));
         gameTimeLine.setCycleCount(Animation.INDEFINITE);
-//        gameTimeLine.play();
     }
 
     public void pressedKey(KeyEvent keyEvent) {
