@@ -59,4 +59,29 @@ class GameStateTest {
         assertEquals(310, ((Circle)board.getChildren().get(0)).getCenterX());
     }
 
+    @Test
+    void gameIsReadyAfterClear(){
+        Pane board = new Pane();
+        board.setPrefSize(600, 600);
+
+        GameState game = new GameState(board);
+
+        game.startGame();
+        game.clearState();
+
+        assertEquals(PlayState.READY, game.getPlayState());
+    }
+
+    @Test
+    void gameIsPlayAfterStart(){
+        Pane board = new Pane();
+        board.setPrefSize(600, 600);
+
+        GameState game = new GameState(board);
+
+        game.startGame();
+
+        assertEquals(PlayState.PLAYING, game.getPlayState());
+    }
+
 }
