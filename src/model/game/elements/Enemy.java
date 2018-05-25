@@ -6,6 +6,10 @@ import java.util.Random;
 
 public class Enemy extends GameElement {
 
+    public static final int MAX_MOVE_IN_ONE_DIRECTION = 5;
+    public static final int MOVE_OFFSET_Y = 3;
+    public static final int START_POSITION_Y = 25;
+    private static final int ENEMY_RADIUS = 20;
     private EnemyType type;
     private int lastDirectionLeft = 0;
     private int health;
@@ -16,11 +20,11 @@ public class Enemy extends GameElement {
      * @param typeEnemy Type of enemy
      */
     public Enemy(double startX, EnemyType typeEnemy) {
-        super(new Circle(20));
+        super(new Circle(ENEMY_RADIUS));
         type = typeEnemy;
         getView().getStyleClass().add(type.styleClassName);
         getView().setCenterX(startX);
-        getView().setCenterY(25);
+        getView().setCenterY(START_POSITION_Y);
         health = type.health;
     }
 
@@ -32,10 +36,10 @@ public class Enemy extends GameElement {
      * @param changeX X offset
      */
     public void moveEnemy(double maxY, double changeX) {
-        if (lastDirectionLeft >= 5)
+        if (lastDirectionLeft >= MAX_MOVE_IN_ONE_DIRECTION)
             changeX *= -1;
-        lastDirectionLeft = (lastDirectionLeft + 1) % 10;
-        changePosition(changeX, 3, Double.POSITIVE_INFINITY);
+        lastDirectionLeft = (lastDirectionLeft + 1) % (MAX_MOVE_IN_ONE_DIRECTION * 2);
+        changePosition(changeX, MOVE_OFFSET_Y, Double.POSITIVE_INFINITY);
         checkIsObBoard(maxY);
     }
 

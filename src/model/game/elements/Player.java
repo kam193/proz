@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.shape.Circle;
 
 public class Player extends GameElement {
+    private static final int PLAYER_RADIUS = 20;
     private SimpleIntegerProperty healthProperty;
 
     /**
@@ -13,7 +14,7 @@ public class Player extends GameElement {
      * @param playerHealth Initial player health
      */
     public Player(double startX, double startY, int playerHealth) {
-        super(new Circle(20));
+        super(new Circle(PLAYER_RADIUS));
         getView().getStyleClass().add("watermelon");
         getView().setCenterX(startX);
         getView().setCenterY(startY);
