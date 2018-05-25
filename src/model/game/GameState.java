@@ -33,7 +33,7 @@ public class GameState {
     private PlayState playState;
 
     private int countIteration = 0;
-    private List<Integer> positions = new ArrayList<>(Arrays.asList(25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575));
+    private List<Integer> startEnemyPositions = new ArrayList<>(Arrays.asList(25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575));
 
     /**
      * Generate new game state, ready to play.
@@ -127,13 +127,13 @@ public class GameState {
     }
 
     /**
-     * Create new enemies on random X positions
+     * Create new enemies on random X startEnemyPositions
      */
     private void createNewEnemies() {
-        Collections.shuffle(positions);
+        Collections.shuffle(startEnemyPositions);
 
         for (int i = 0; i < level.numberOfEnemiesToCreate; i++) {
-            Enemy enemy = new Enemy(positions.get(i), Enemy.EnemyType.randomType());
+            Enemy enemy = new Enemy(startEnemyPositions.get(i), Enemy.EnemyType.randomType());
 
             enemies.add(enemy);
             gameBoard.getChildren().add(enemy.getView());
