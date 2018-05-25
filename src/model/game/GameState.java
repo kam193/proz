@@ -11,9 +11,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class GameState {
 
+    public static final int PLAYER_START_POSITION_X = 50;
+    public static final int PLAYER_HEALTH = 5;
+    public static final int PLAYER_MOVE_OFFSET_X = 10;
     private List endGameListeners = new ArrayList();
 
     private Pane gameBoard;
@@ -38,7 +42,7 @@ public class GameState {
      */
     public GameState(Pane gameBoard) {
         this.gameBoard = gameBoard;
-        player = new Player(gameBoard.getPrefWidth() / 2, gameBoard.getPrefHeight() - 50, 5);
+        player = new Player(gameBoard.getPrefWidth() / 2, gameBoard.getPrefHeight() - PLAYER_START_POSITION_X, PLAYER_HEALTH);
         gameBoard.getChildren().add(player.getView());
         playState = PlayState.READY;
     }
@@ -65,27 +69,19 @@ public class GameState {
 
         bullets.forEach(e -> e.moveBullet(gameBoard.getHeight()));
 
-        bullets.forEach(bullet -> enemies.forEach(enemy -> {
-            if (bullet.isCollision(enemy)) {
-                bullet.setToRemove(true);
-                if (enemy.hitAndIsKilled()) {
-                    statistics.addKilledEnemy(enemy.getType());
-                }
-            }
-        }));
+        bullets.forEach(checkCollisionsWithEnemies());
+        enemies.forEach(checkCollisionWithPlayer());
 
-        enemies.forEach(enemy -> {
-            if (player.isCollision(enemy)) {
-                player.setHealthProperty(player.getHealthProperty().get() - 1);
-                enemy.setToRemove(true);
+        removeBulletsAndEnemiesIfNeccecary();
 
-                if (player.getHealthProperty().get() <= 0) {
-                    playState = PlayState.ENDGAME;
-                    fireEndGameEvent();
-                }
-            }
-        });
+        if (statistics.getPointsProperty().get() >= level.nextLevelOnPoints) {
+            changeLevel(level.next());
+        }
 
+        countIteration += 1;
+    }
+
+    private void removeBulletsAndEnemiesIfNeccecary() {
         enemies.forEach(e -> {
             if (e.isToRemove()) gameBoard.getChildren().remove(e.getView());
         });
@@ -95,12 +91,31 @@ public class GameState {
 
         enemies.removeIf(e -> e.isToRemove());
         bullets.removeIf(e -> e.isToRemove());
+    }
 
-        if (statistics.getPointsProperty().get() >= level.nextLevelOnPoints) {
-            changeLevel(level.next());
-        }
+    private Consumer<Enemy> checkCollisionWithPlayer() {
+        return enemy -> {
+            if (player.isCollision(enemy)) {
+                player.setHealthProperty(player.getHealthProperty().get() - 1);
+                enemy.setToRemove(true);
 
-        countIteration += 1;
+                if (player.getHealthProperty().get() <= 0) {
+                    playState = PlayState.ENDGAME;
+                    fireEndGameEvent();
+                }
+            }
+        };
+    }
+
+    private Consumer<Bullet> checkCollisionsWithEnemies() {
+        return bullet -> enemies.forEach(enemy -> {
+            if (bullet.isCollision(enemy)) {
+                bullet.setToRemove(true);
+                if (enemy.hitAndIsKilled()) {
+                    statistics.addKilledEnemy(enemy.getType());
+                }
+            }
+        });
     }
 
     /**
@@ -129,14 +144,14 @@ public class GameState {
      * Move player to left
      */
     public void movePlayerLeft() {
-        player.changePosition(-10, 0, 600);
+        player.changePosition(-PLAYER_MOVE_OFFSET_X, 0, gameBoard.getPrefWidth());
     }
 
     /**
      * Move player to right
      */
     public void movePlayerRight() {
-        player.changePosition(10, 0, 600);
+        player.changePosition(PLAYER_MOVE_OFFSET_X, 0, gameBoard.getPrefWidth());
     }
 
     /**
@@ -165,7 +180,7 @@ public class GameState {
 
         player.setHealthProperty(5);
         player.getView().setCenterX(gameBoard.getPrefWidth() / 2);
-        player.getView().setCenterY(gameBoard.getPrefHeight() - 50);
+        player.getView().setCenterY(gameBoard.getPrefHeight() - PLAYER_START_POSITION_X);
 
         playState = PlayState.READY;
     }
