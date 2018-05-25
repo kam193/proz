@@ -33,11 +33,11 @@ public class Controller implements GameEndListener {
     public Pane paneGame;
 
     private Timeline gameTimeLine;
-    private Timeline keysTimeLine;
 
     private boolean isShootKeyTyped = false;
-    private boolean isMoveKeyTyped = false;
     private boolean isMoveToLeft = false;
+    private boolean isMoveToRight = false;
+    private boolean isLastPressedLeft = false;
 
     /**
      * Set up view's bindings and key events. Prepare timers.
@@ -65,11 +65,11 @@ public class Controller implements GameEndListener {
 
         paneHealth.prefWidthProperty().bind(gameState.getPlayerHealthProperty().multiply(32));
 
-        gameTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.05), event -> gameState.clockTick()));
+        gameTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.05), event -> {
+            gameState.clockTick();
+            makeMoveAndShoot();
+        }));
         gameTimeLine.setCycleCount(Animation.INDEFINITE);
-
-        keysTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.05), event -> makeMoveAndShoot()));
-        keysTimeLine.setCycleCount(Animation.INDEFINITE);
     }
 
     /**
@@ -80,17 +80,18 @@ public class Controller implements GameEndListener {
             gameState.shootPlayer();
         }
 
-        if (isMoveKeyTyped && isMoveToLeft) {
+        if (isMoveToLeft && isLastPressedLeft) {
             gameState.movePlayerLeft();
         }
 
-        if (isMoveKeyTyped && !isMoveToLeft) {
+        if (isMoveToRight && !isLastPressedLeft) {
             gameState.movePlayerRight();
         }
     }
 
     /**
      * On release key, disable moving or shooting
+     *
      * @param keyEvent
      */
     private void releasedKey(KeyEvent keyEvent) {
@@ -98,18 +99,21 @@ public class Controller implements GameEndListener {
             if (keyEvent.getCode() == KeyCode.SPACE) {
                 isShootKeyTyped = false;
             } else if (keyEvent.getCode() == KeyCode.LEFT) {
-                isMoveKeyTyped = false;
+                isMoveToLeft = false;
+                isLastPressedLeft = false;
             } else if (keyEvent.getCode() == KeyCode.RIGHT) {
-                isMoveKeyTyped = false;
+                isMoveToRight = false;
+                isLastPressedLeft = true;
             }
         }
     }
 
     /**
      * On press key:
-     *      when game is play - activate moving or shooting,
-     *      when app is start - play game,
-     *      when game is over - restart game.
+     * when game is play - activate moving or shooting,
+     * when app is start - play game,
+     * when game is over - restart game.
+     *
      * @param keyEvent event object
      */
     public void pressedKey(KeyEvent keyEvent) {
@@ -118,10 +122,10 @@ public class Controller implements GameEndListener {
                 isShootKeyTyped = true;
             } else if (keyEvent.getCode() == KeyCode.LEFT) {
                 isMoveToLeft = true;
-                isMoveKeyTyped = true;
+                isLastPressedLeft = true;
             } else if (keyEvent.getCode() == KeyCode.RIGHT) {
-                isMoveToLeft = false;
-                isMoveKeyTyped = true;
+                isMoveToRight = true;
+                isLastPressedLeft = false;
             }
         } else if (gameState.getPlayState() == PlayState.ENDGAME) {
             if (keyEvent.getCode() == KeyCode.SPACE) {
@@ -143,21 +147,21 @@ public class Controller implements GameEndListener {
     private void playGame() {
         gameState.startGame();
         gameTimeLine.play();
-        keysTimeLine.play();
     }
 
     /**
      * On game end, stop timers and show dialog.
+     *
      * @param event event object
      */
     @Override
     public void endGameReceived(GameEndEvent event) {
-        keysTimeLine.stop();
         gameTimeLine.stop();
         gameOverDialog.setVisible(true);
         gameOverDialog.toFront();
 
         isShootKeyTyped = false;
-        isMoveKeyTyped = false;
+        isMoveToRight = false;
+        isMoveToLeft = false;
     }
 }
