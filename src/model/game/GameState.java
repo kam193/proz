@@ -63,10 +63,10 @@ public class GameState {
 
         enemies.forEach(enemy -> {
             if (player.isCollision(enemy)) {
-                player.setHealthProperty(player.getHealyhProperty().get() - 1);
+                player.setHealthProperty(player.getHealthProperty().get() - 1);
                 enemy.setToRemove(true);
 
-                if (player.getHealyhProperty().get() <= 0) {
+                if (player.getHealthProperty().get() <= 0) {
                     playState = PlayState.ENDGAME;
                     fireEndGameEvent();
                 }
@@ -143,7 +143,7 @@ public class GameState {
     }
 
     public SimpleIntegerProperty getPlayerHealthProperty() {
-        return player.getHealyhProperty();
+        return player.getHealthProperty();
     }
 
     public GameLevel getLevel() {

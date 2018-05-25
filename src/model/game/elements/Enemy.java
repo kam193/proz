@@ -10,6 +10,11 @@ public class Enemy extends GameElement {
     private int lastDirectionLeft = 0;
     private int health;
 
+    /**
+     * Create enemy on Y = 25 and X = param with type from param.
+     * @param startX Start X point
+     * @param typeEnemy Type of enemy
+     */
     public Enemy(double startX, EnemyType typeEnemy) {
         super(new Circle(20));
         type = typeEnemy;
@@ -19,6 +24,13 @@ public class Enemy extends GameElement {
         health = type.health;
     }
 
+    /**
+     * Move enemy in Y to down, and in X five times to left,
+     * next 5 times to right. Repeat. And check is on board,
+     * optionaly set to remove.
+     * @param maxY Max Y value
+     * @param changeX X offset
+     */
     public void moveEnemy(double maxY, double changeX) {
         if (lastDirectionLeft >= 5)
             changeX *= -1;
@@ -27,6 +39,11 @@ public class Enemy extends GameElement {
         checkIsObBoard(maxY);
     }
 
+    /**
+     * Hit this enemy, decrease health and check is still alive.
+     * If killed in this hit, set to remove and return true.
+     * @return True, if kill in this hit
+     */
     public boolean hitAndIsKilled() {
         if (--health == 0) {
             setToRemove(true);
