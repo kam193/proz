@@ -23,6 +23,9 @@ public enum GameLevel {
         levelName = name;
     }
 
+    /**
+     * @return Generate next level - or last, if no next exist
+     */
     public GameLevel next() {
         return (this.ordinal() + 1) % values().length == 0 ? this : values()[(this.ordinal() + 1) % values().length];
     }

@@ -31,6 +31,11 @@ public class GameState {
     private int countIteration = 0;
     private List<Integer> positions = new ArrayList<>(Arrays.asList(25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575));
 
+    /**
+     * Generate new game state, ready to play.
+     * Make player.
+     * @param gameBoard Pane to draw game
+     */
     public GameState(Pane gameBoard) {
         this.gameBoard = gameBoard;
         player = new Player(gameBoard.getPrefWidth() / 2, gameBoard.getPrefHeight() - 50, 5);
@@ -38,10 +43,18 @@ public class GameState {
         playState = PlayState.READY;
     }
 
+    /**
+     * Start game. Set state to Playing
+     */
     public void startGame() {
         playState = PlayState.PLAYING;
     }
 
+    /**
+     * Rune one clock tick. Move enemies, bullets.
+     * Check collisions, remove elements is necessary.
+     * Level up. Check, is game over
+     */
     public void clockTick() {
         if (countIteration % level.createEnemiesEveryNTicks == 0) {
             createNewEnemies();
@@ -90,11 +103,17 @@ public class GameState {
         countIteration += 1;
     }
 
+    /**
+     * @param next New level
+     */
     private void changeLevel(GameLevel next) {
         level = next;
         levelNameProperty.set(level.toString());
     }
 
+    /**
+     * Create new enemies on random X positions
+     */
     private void createNewEnemies() {
         Collections.shuffle(positions);
 
@@ -106,20 +125,33 @@ public class GameState {
         }
     }
 
+    /**
+     * Move player to left
+     */
     public void movePlayerLeft() {
         player.changePosition(-10, 0, 600);
     }
 
+    /**
+     * Move player to right
+     */
     public void movePlayerRight() {
         player.changePosition(10, 0, 600);
     }
 
+    /**
+     * Make shoot and add to game board
+     */
     public void shootPlayer() {
         Bullet bull = player.shoot();
         bullets.add(bull);
         gameBoard.getChildren().add(bull.getView());
     }
 
+    /**
+     * Clear game, ready to restart.
+     * Remove enemies, clear statistics.
+     */
     public void clearState() {
         enemies.forEach(e -> gameBoard.getChildren().remove(e.getView()));
         bullets.forEach(b -> gameBoard.getChildren().remove(b.getView()));
@@ -138,6 +170,9 @@ public class GameState {
         playState = PlayState.READY;
     }
 
+    /**
+     * @return GameStats object with statistics
+     */
     public GameStats getStatistics() {
         return statistics;
     }
@@ -166,6 +201,9 @@ public class GameState {
         endGameListeners.remove(listener);
     }
 
+    /**
+     * Send event of GameEnd
+     */
     private synchronized void fireEndGameEvent() {
         GameEndEvent event = new GameEndEvent(this);
         endGameListeners.forEach(e -> ((GameEndListener) e).endGameReceived(event));
