@@ -39,6 +39,9 @@ public class Controller implements GameEndListener {
     private boolean isMoveKeyTyped = false;
     private boolean isMoveToLeft = false;
 
+    /**
+     * Set up view's bindings and key events. Prepare timers.
+     */
     @FXML
     public void initialize() {
         gameState = new GameState(paneGame);
@@ -69,6 +72,9 @@ public class Controller implements GameEndListener {
         keysTimeLine.setCycleCount(Animation.INDEFINITE);
     }
 
+    /**
+     * On every timer tick, check is time to move or shoot
+     */
     private void makeMoveAndShoot() {
         if (isShootKeyTyped) {
             gameState.shootPlayer();
@@ -83,6 +89,10 @@ public class Controller implements GameEndListener {
         }
     }
 
+    /**
+     * On release key, disable moving or shooting
+     * @param keyEvent
+     */
     private void releasedKey(KeyEvent keyEvent) {
         if (gameState.getPlayState() == PlayState.PLAYING) {
             if (keyEvent.getCode() == KeyCode.SPACE) {
@@ -95,6 +105,13 @@ public class Controller implements GameEndListener {
         }
     }
 
+    /**
+     * On press key:
+     *      when game is play - activate moving or shooting,
+     *      when app is start - play game,
+     *      when game is over - restart game.
+     * @param keyEvent event object
+     */
     public void pressedKey(KeyEvent keyEvent) {
         if (gameState.getPlayState() == PlayState.PLAYING) {
             if (keyEvent.getCode() == KeyCode.SPACE) {
@@ -120,12 +137,19 @@ public class Controller implements GameEndListener {
         }
     }
 
+    /**
+     * Start game, start game and keys timers.
+     */
     private void playGame() {
         gameState.startGame();
         gameTimeLine.play();
         keysTimeLine.play();
     }
 
+    /**
+     * On game end, stop timers and show dialog.
+     * @param event event object
+     */
     @Override
     public void endGameReceived(GameEndEvent event) {
         keysTimeLine.stop();
